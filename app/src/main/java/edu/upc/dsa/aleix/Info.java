@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -143,13 +145,18 @@ public class Info extends AppCompatActivity {
                         Log.d(tag, " numfollows: "+numrepos);
 
                         //Imatge
-                        /*String AvatarUrl;
-                        AvatarUrl = a.getAvatar_url();
-                        try {
+                        String AvatarUrl = a.getAvatar_url();
+                        /*try {
                             drawableFromUrl(AvatarUrl);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }*/
+                        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        Log.d(tag, "FGFGFGF");
+                        Glide.with(Info.this)
+                                .load(AvatarUrl)
+                                .into(imageView);
+
                     }
                     else {
                         Toast.makeText(Info.this, "No funciona 1: "+response.code(), Toast.LENGTH_SHORT).show();
@@ -168,7 +175,7 @@ public class Info extends AppCompatActivity {
 
     }
 
-    public static Drawable drawableFromUrl(String url) throws IOException {
+   /* public static Drawable drawableFromUrl(String url) throws IOException {
         Bitmap x;
 
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -177,6 +184,6 @@ public class Info extends AppCompatActivity {
 
         x = BitmapFactory.decodeStream(input);
         return new BitmapDrawable(x);
-    }
+    }*/
 
 }
