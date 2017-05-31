@@ -130,10 +130,8 @@ public class Info extends AppCompatActivity {
                         visualizarnombre.setText(name);
                         Log.d(tag, " !!!!!iconName: "+name);
 
-
-
                         //Nº REPOSITORIS
-                        int numrepos = a.getFollowing();
+                        int numrepos = a.getPublic_repos();
                         TextView visualizarrepos = (TextView)findViewById(R.id.textView5);
                         visualizarrepos.setText(""+numrepos);
                         Log.d(tag, " numrepos: "+numrepos);
