@@ -14,6 +14,9 @@ interface Service {
     @GET("/users/{name}/followers")
     Call<List<Follower>> getList(@Path("name") String name);
 
-    @GET("/users/{name}/followers")
-    Call<Follower> getPhoto(@Path("name") String name);
+    @GET("/users/{name}")
+    Call<Follower> getFollower(@Path("name") String name);
+
+    @GET("/users/{name}/following")
+    Call<List<Follower>> getListrepos(@Path("name") String name);
 }

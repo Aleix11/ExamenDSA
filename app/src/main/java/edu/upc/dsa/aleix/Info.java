@@ -6,9 +6,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -32,6 +35,8 @@ public class Info extends AppCompatActivity {
     private List<String> listaNombres;
     private ListView listv;
     private ImageView imagen;
+    private ProgressBar progressbar;
+    final String tag = "MAPACT";
 
 
     @Override
@@ -39,7 +44,7 @@ public class Info extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        //Printar la llista de seguidors
+        //llista de seguidors
         try {
             Bundle extra = getIntent().getExtras();
             String name = extra.getString("name");
@@ -60,10 +65,9 @@ public class Info extends AppCompatActivity {
 
             // Fetch and print a list of the contributors to the library.
             call.enqueue(new Callback<List<Follower>>() {
-
-                //***************Comprobacion de que recoge los datos**********
                 @Override
                 public void onResponse(Call<List<Follower>> call, Response<List<Follower>> response) {
+                    progressbar = (ProgressBar) findViewById(R.id.progress);
                     if(response.code()==200){
                         listaFollow=(List<Follower>) response.body();
                         listv = (ListView) findViewById(R.id.listaV);
@@ -78,12 +82,15 @@ public class Info extends AppCompatActivity {
                     }
                     else {
                         Toast.makeText(Info.this, "No funciona: "+response.code(), Toast.LENGTH_SHORT).show();
+                        Info.this.finish();
                     }
+                    progressbar.setVisibility(ListView.GONE);
                 }
 
                 @Override
                 public void onFailure(Call<List<Follower>> call, Throwable t) {
                     Toast.makeText(Info.this, "No funciona", Toast.LENGTH_SHORT).show();
+                    Info.this.finish();
                 }
             });
         }
@@ -92,7 +99,7 @@ public class Info extends AppCompatActivity {
         }
 
 
-        //Imatge usuari
+        //Nom i Imatge usuari
         try {
             Bundle extra = getIntent().getExtras();
             String name = extra.getString("name");
@@ -109,39 +116,58 @@ public class Info extends AppCompatActivity {
             Service getList = retrofit.create(Service.class);
 
             // Create a call instance for looking up Retrofit contributors.
-            Call<Follower> call = getList.getPhoto(name);
+            Call<Follower> call = getList.getFollower(name);
 
             // Fetch and print a list of the contributors to the library.
             call.enqueue(new Callback<Follower>() {
-
-                //***************Comprobacion de que recoge los datos**********
                 @Override
                 public void onResponse(Call<Follower> call, Response<Follower> response) {
                     if(response.code()==200){
                         Follower a = (Follower) response.body();
-                        String AvatarUrl;
+                        //NOMBRE
+                        String name = a.getName();
+                        TextView visualizarnombre = (TextView)findViewById(R.id.textView2);
+                        visualizarnombre.setText(name);
+                        Log.d(tag, " !!!!!iconName: "+name);
+
+
+
+                        //Nº REPOSITORIS
+                        int numrepos = a.getFollowing();
+                        TextView visualizarrepos = (TextView)findViewById(R.id.textView5);
+                        visualizarrepos.setText(""+numrepos);
+                        Log.d(tag, " numrepos: "+numrepos);
+
+                        //Nº FOLLOWINGS
+                        int numfollow = a.getFollowing();
+                        TextView visualizarfollows = (TextView)findViewById(R.id.textView6);
+                        visualizarfollows.setText(""+numfollow);
+                        Log.d(tag, " numfollows: "+numrepos);
+
+                        //Imatge
+                        /*String AvatarUrl;
                         AvatarUrl = a.getAvatar_url();
                         try {
                             drawableFromUrl(AvatarUrl);
                         } catch (IOException e) {
                             e.printStackTrace();
-                        }
-
+                        }*/
                     }
                     else {
-                        Toast.makeText(Info.this, "No funciona: "+response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Info.this, "No funciona 1: "+response.code(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Follower> call, Throwable t) {
-                    Toast.makeText(Info.this, "No funciona", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Info.this, "No funciona 2", Toast.LENGTH_SHORT).show();
                 }
             });
         }
         catch (Exception e){
             Toast.makeText(Info.this, "No funciona", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public static Drawable drawableFromUrl(String url) throws IOException {

@@ -18,9 +18,16 @@ public class Follower {
     private String events_url;
     private String received_events_url;
     private String type;
+    private String name;
     private boolean site_admin;
+    private int public_repos;
+    private int following;
 
-    public Follower() {
+
+    public String getName(){ return name;}
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLogin() {
@@ -157,5 +164,21 @@ public class Follower {
 
     public void setSite_admin(boolean site_admin) {
         this.site_admin = site_admin;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
+    }
+
+    public int getPublic_repos() {
+        return public_repos;
+    }
+
+    public void setPublic_repos(int public_repos) {
+        this.public_repos = public_repos;
     }
 }
