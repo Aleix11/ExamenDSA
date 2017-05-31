@@ -1,5 +1,9 @@
 package edu.upc.dsa.aleix;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -7,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,6 +121,12 @@ public class Info extends AppCompatActivity {
                         Follower a = (Follower) response.body();
                         String AvatarUrl;
                         AvatarUrl = a.getAvatar_url();
+                        try {
+                            drawableFromUrl(AvatarUrl);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                     else {
                         Toast.makeText(Info.this, "No funciona: "+response.code(), Toast.LENGTH_SHORT).show();
@@ -128,6 +142,17 @@ public class Info extends AppCompatActivity {
         catch (Exception e){
             Toast.makeText(Info.this, "No funciona", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static Drawable drawableFromUrl(String url) throws IOException {
+        Bitmap x;
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.connect();
+        InputStream input = connection.getInputStream();
+
+        x = BitmapFactory.decodeStream(input);
+        return new BitmapDrawable(x);
     }
 
 }
