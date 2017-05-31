@@ -31,6 +31,7 @@ public class Info extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
+        //Printar la llista de seguidors
         try {
             Bundle extra = getIntent().getExtras();
             String name = extra.getString("name");
@@ -82,6 +83,8 @@ public class Info extends AppCompatActivity {
             Toast.makeText(Info.this, "No funciona", Toast.LENGTH_SHORT).show();
         }
 
+
+        //Imatge usuari
         try {
             Bundle extra = getIntent().getExtras();
             String name = extra.getString("name");
@@ -98,17 +101,18 @@ public class Info extends AppCompatActivity {
             Service getList = retrofit.create(Service.class);
 
             // Create a call instance for looking up Retrofit contributors.
-            Call<ImageView> call = getList.getPhoto(name);
+            Call<Follower> call = getList.getPhoto(name);
 
             // Fetch and print a list of the contributors to the library.
-            call.enqueue(new Callback<ImageView>() {
+            call.enqueue(new Callback<Follower>() {
 
                 //***************Comprobacion de que recoge los datos**********
                 @Override
-                public void onResponse(Call<ImageView> call, Response<ImageView> response) {
+                public void onResponse(Call<Follower> call, Response<Follower> response) {
                     if(response.code()==200){
-                        imagen=(ImageView) response.body();
-                        
+                        Follower a = (Follower) response.body();
+                        String AvatarUrl;
+                        AvatarUrl = a.getAvatar_url();
                     }
                     else {
                         Toast.makeText(Info.this, "No funciona: "+response.code(), Toast.LENGTH_SHORT).show();
@@ -116,7 +120,7 @@ public class Info extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ImageView> call, Throwable t) {
+                public void onFailure(Call<Follower> call, Throwable t) {
                     Toast.makeText(Info.this, "No funciona", Toast.LENGTH_SHORT).show();
                 }
             });

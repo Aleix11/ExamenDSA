@@ -1,8 +1,5 @@
 package edu.upc.dsa.aleix;
 
-/**
- * Created by Mikel on 31/05/2017.
- */
 
 public class Follower {
     private String login;
